@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Image Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-black to-gray-900 text-white min-h-screen">
+
+  <div class="max-w-3xl mx-auto py-12 px-4">
+    <h1 class="text-4xl font-bold text-center mb-6">
+      ✨ AI Image Generator
+    </h1>
+
+    <div class="bg-gray-800 rounded-2xl p-6 shadow-xl">
+      <input id="prompt"
+        class="w-full p-3 rounded bg-gray-700 focus:outline-none"
+        placeholder="Enter your prompt..." />
+
+      <button onclick="generate()"
+        class="mt-4 w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-xl font-bold transition">
+        Generate Image
+      </button>
+    </div>
+
+    <div id="result" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8"></div>
+  </div>
+
+<script>
+async function generate() {
+  const prompt = document.getElementById("prompt").value
+  const result = document.getElementById("result")
+  result.innerHTML = "⏳ Generating..."
+
+  const res = await fetch(`/api/generate?prompt=${encodeURIComponent(prompt)}&image=2`)
+  const data = await res.json()
+
+  result.innerHTML = ""
+  data.images.forEach(img => {
+    const el = document.createElement("img")
+    el.src = img
+    el.className = "rounded-xl shadow-lg hover:scale-105 transition"
+    result.appendChild(el)
+  })
+}
+</script>
+
+</body>
+</html>
